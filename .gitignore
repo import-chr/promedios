@@ -1,0 +1,5 @@
+# ignoring  executable file
+main.exe
+
+# ignoring source folder
+source-cpp/
