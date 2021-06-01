@@ -22,6 +22,7 @@ using namespace std;
 /* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
+int bucle;
 /* --------------- variables --------------- */
 
 int main() {
@@ -29,6 +30,27 @@ int main() {
 
 	//inicializador
 	start();
+	
+	if(menu_option != 3) {
+		do {
+			cout<<"[1] Volver al menú [2] Salir"<<endl;
+			cin>>bucle;
+			
+			if(bucle == 1) {
+				system("cls");
+				
+				menu();
+				
+				if(menu_option == 3) {
+					break;
+				}
+			}
+		} while(bucle == 1);
+	}
+	
+	//delete materias;
+	//delete alumnos;
+	//delete grupos;
 
 	getch();
 

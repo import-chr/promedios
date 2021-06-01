@@ -8,8 +8,8 @@
 /* --------------- librerias c++ --------------- */
 
 /* --------------- headers --------------- */
-#include "dataGroup.h"
 #include "safePass.h"
+#include "csvFile.h"
 /* --------------- headers --------------- */
 
 using namespace std;
@@ -27,8 +27,8 @@ void menu();									//menu principal
 
 /* --------------- variables --------------- */
 //unico administrador
-static const char user_[] = "admin";
-static const char pass_[] = "password";
+static const char user_[] = "a";
+static const char pass_[] = "p";
 
 static char user[10];							//nombre de usuario
 static char passw[10];							//contraseña
@@ -43,6 +43,7 @@ bool logIn(bool &sLog) {
 	cout<<"Usuario: ";
 	cin>>user;
 	cout<<"Contraseña: ";
+	//cin.getline(passw, 10);
 	leerPasw(passw);
 
 	//usuario y contrase? correctos
@@ -89,18 +90,19 @@ void repAccess(int &r1, int &c) {
 //menu
 void menu() {
 	cout<<"------------ MENU ------------"<<endl;
-	cout<<"\n\t[1] Ver Grupos\n\t[2] Agregar Grupos\n\t[3] Salir\n"<<endl;
+	cout<<"\n\t[1] Ver Grupos\n\t[2] Agregar Grupo\n\t[3] Salir\n"<<endl;
 	cout<<"------------------------------"<<endl;
 	cin>>menu_option;
 
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
-			cout<<"no disponible por le momento..."<<endl;
+			printGrupos();
 			break;
 		case 2:
 			cout<<"------------ AGREGAR GRUPO ------------"<<endl;
-			llamadas(nGrupos);
+			asignaMemGrupo(&tGrupos);
+			makeFile();
 			break;
 		case 3:
 			cout<<"Gracias por utilizar main.exe\nSaliendo..."<<endl;

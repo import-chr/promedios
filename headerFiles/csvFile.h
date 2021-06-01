@@ -9,8 +9,10 @@
 #include <ctime>
 /* --------------- librerias c++ --------------- */
 
+using namespace std;
+
 /* --------------- headers --------------- */
-//#include "dataGroup.h"
+#include "dataGroup.h"
 /* --------------- headers --------------- */
 
 using namespace std;
@@ -23,17 +25,10 @@ void makeFile();
 /* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
+ofstream dataFile("promedioGrupos.csv");
 /* --------------- variables --------------- */
 
 /* --------------- funciones --------------- */
 void makeFile() {
-	fstream dataFile;
-	fstream read_dataFile("promedioGrupos.csv", ios::in);
-	
-	if(!read_dataFile) {
-		cout<<"Creando archivo..."<<endl;
-		fstream make_dataFile("promedioGrupos.csv", ios::out);
-		make_dataFile<<"alumnos/materias"<<endl;
-	}
 }
 /* --------------- funciones --------------- */

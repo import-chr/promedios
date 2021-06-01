@@ -5,105 +5,153 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string>
 /* --------------- librerias c++ --------------- */
 
 using namespace std;
 
 /* --------------- headers --------------- */
-#include "csvFile.h"
 /* --------------- headers --------------- */
 
 /* --------------- prototipos --------------- */
-void writeMateria(struct materia_datos);					//escritura de materias
-void writeAlumno(struct alumno_datos, int &);				//escritura de alumnos
-void writeGrupo(struct grupo_datos, int &);					//escritura de grupos
-void llamadas(int &);										//llamada de func
+//asignacion de memoria
+void asignaMemMateria(int *);
+void asignaMemAlumno(int *);
+void asignaMemGrupo(int *);
+
+//escritura de datos
+void writeMateria(int);
+void writeAlumno(int);
+void writeGrupo(int);
+
+void printGrupos();
 /* --------------- prototipos --------------- */
 
-/* --------------- variables --------------- */
-int nDiscentes = 2, nMaterias = 3, nGrupos = 2, answer;		//memoria estatica
-/* --------------- variables --------------- */
-
 /* --------------- estructuras --------------- */
-//datos por materia
-struct materia_datos {
-	char unidadA[10];
-	float calificaion;
-	float promedio;
-} materia_[3];
+//Materia
+typedef struct m {
+	char nombreM[10];
+	float calificacion;
+	float promedioM;
+} Materias;
 
-//datos por alumno
-struct alumno_datos {
-	char nombres[15];
-	char apellidos[15];
-	materia_datos unidadAprendizaje;
-	float promedio;
-} alumno_[2];
+//Alumno
+typedef struct a {
+	char nombresA[10];
+	char apellidos[10];
+	m unidadesA;
+	float promedioA;
+} Alumnos;
 
-//datos por grupo
-struct grupo_datos {
-	char nombre[10];
-	alumno_datos discente;
-	float promedio;
-} grupo_[2];
+//Grupo
+typedef struct g {
+	char nombreG[10];
+	a discentes;
+	float promedioG;
+} Grupos;
 /* --------------- estructuras --------------- */
+
+/* --------------- variables --------------- */
+Materias *materias;
+Alumnos *alumnos;
+Grupos *grupos;
+
+int tMaterias = 0, tAlumnos = 0, tGrupos = 0, masDatos;				//tamaño de los vectores
+/* --------------- variables --------------- */
 
 /* --------------- funciones --------------- */
-//escribe datos para materias
-void writeMateria(struct materia_datos materia) {
-	cout<<"Datos de la materia"<<endl;
-	cout<<"Unidad de aprendizaje: ";
-	cin.ignore();
-	cin.getline(materia.unidadA, 10);
-	cout<<"Calificaión obtenida: ";
-	cin>>materia.calificaion;
-	fflush(stdin);
+//asiganacion de memoria a las materias
+void asignaMemMateria(int *cantM) {
+	materias = (Materias*) malloc((*cantM + 1) * sizeof(Materias));
+	
+	writeMateria(*cantM);
+	
+	(*cantM)++;
+	//tMaterias++;
 }
 
-//escribe datos para alumnos
-void writeAlumno(struct alumno_datos alumno, int &nM) {
-	cout<<"Datos del alumno"<<endl;
-	cout<<"Nombres: ";
+//asignacion de memoria a los alumnos
+void asignaMemAlumno(int *cantA) {
+	alumnos = (Alumnos*) malloc((*cantA + 1) * sizeof(Alumnos));
+	
+	writeAlumno(*cantA);
+	
+	(*cantA)++;
+	//tAlumnos++;
+}
+
+//asignacion de memoria a los grupos
+void asignaMemGrupo(int *cantG) {
+	grupos = (Grupos*) malloc((*cantG + 1) * sizeof(Grupos));
+	
+	writeGrupo(*cantG);
+	
+	(*cantG)++;
+	//tGrupos++;
+}
+
+//escritura de datos de la materia
+void writeMateria(int cantm) {
+	cout<<"\t --- Materia ---"<<endl;
+	cout<<"Nombre: ";
 	cin.ignore();
-	cin.getline(alumno.nombres, 15);
+	cin.getline(materias -> nombreM, 10, '\n');
+	cout<<"Calificación: ";
+	cin>>materias -> calificacion;
+	cout<<"¿agregar otra materia? [1] si [2] no ";
+	cin>>masDatos;
+	
+	if(masDatos == 1) {
+		asignaMemMateria(&cantm);
+	}
+}
+
+//escritura de datos del alumno
+void writeAlumno(int canta) {
+	cout<<"\t --- Alumno ---"<<endl;
+	cout<<"Nombre: ";
+	cin.ignore();
+	cin.getline(alumnos -> nombresA, 10, '\n');
 	cout<<"Apellidos: ";
-	cin.getline(alumno.apellidos, 15);
-	fflush(stdin);
-
-	cout<<"¿Desea agregar materias ahora?\n[1] si\n[2] no\n";
-	cin>>answer;
+	cin.getline(alumnos -> apellidos, 10, '\n');
+	cout<<"agregar materias: [1] si [2] no ";
+	cin>>masDatos;
 	
-	if(answer == 1) {		
-		//writeMateria(-) por cada materia del alumno
-		for(int i = 0; i < nM; i++) {
-			writeMateria(materia_[i]);
-		}
+	if(masDatos == 1) {
+		asignaMemMateria(&canta);
 	}
 }
 
-//escribe datos para grupos
-void writeGrupo(struct grupo_datos grupo, int &nA) {
-	cout<<"Grupo: ";
+//escritura de datos del grupo
+void writeGrupo(int cantg) {
+	cout<<"\t ---- Grupo ----"<<endl;
+	cout<<"Nombre: ";
 	cin.ignore();
-	cin.getline(grupo.nombre, 10);
 	fflush(stdin);
+	cin.getline(grupos -> nombreG, 10, '\n');
+	cout<<"Grupo: "<<grupos -> nombreG<<endl;
+	cout<<"agregar alumnos: [1] si [2] no ";
+	cin>>masDatos;
 	
-	cout<<"¿Desea agregar alumnos ahora?\n[1] si\n[2] no\n";
-	cin>>answer;
+	if(masDatos == 1) {
+		asignaMemAlumno(&cantg);
+	}
 	
-	if(answer == 1) {
-		//writeAlumno(-) por cada alumno del grupo
-		for(int i = 0; i < nA; i++) {
-			writeAlumno(alumno_[i], nMaterias);
-		}
+	cout<<"¿agregar otro grupo? [1] si [2] no ";
+	cin>>masDatos;
+	cout<<"Cantidad de grupos: "<<tGrupos<<endl;
+	
+	if(masDatos == 1) {
+		asignaMemGrupo(&tGrupos);
 	}
 }
 
-//llamadas generales
-void llamadas(int &nG) {
-	for(int i = 0; i < nG; i++) {
-		writeGrupo(grupo_[i], nDiscentes);
+//imprime grupos
+void printGrupos() {
+	cout<<"   --- GRUPOS REGISTRADOS ---"<<endl;
+
+	for(int i = 0; i < tGrupos; i++) {
+		cout<<"["<<i + 1<<"] "<<grupos -> nombreG[i]<<endl;
 	}
-	//makeFile();
 }
 /* --------------- funciones --------------- */
