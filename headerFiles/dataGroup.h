@@ -13,145 +13,137 @@ using namespace std;
 /* --------------- headers --------------- */
 /* --------------- headers --------------- */
 
+/* --------------- estructuras --------------- */
+//struct de materia
+typedef struct {
+	char nombre[10];
+	float nota;
+	float promedio;
+} SMateria;
+
+//struct de alumno
+typedef struct {
+	char nombre[10];
+	SMateria materia;
+	float promedio;
+} SAlumno;
+
+//struct de grupo
+typedef struct {
+	char nombre[10];
+	SAlumno alumno;
+	float promedio;
+} SGrupo;
+/* --------------- estructuras --------------- */
+
+/* --------------- variables --------------- */
+//array de struct dinamicos
+SMateria *materias = NULL;
+SAlumno *alumnos = NULL;
+SGrupo *grupos = NULL;
+
+//cantidad de elementos
+int tMaterias = 0, tAlumnos = 0, tGrupos = 0;
+int masDatos, contG;
+/* --------------- variables --------------- */
+
 /* --------------- prototipos --------------- */
 //asignacion de memoria
-void asignaMemMateria(int *);
-void asignaMemAlumno(int *);
-void asignaMemGrupo(int *);
+void materia_dm(int &);
+void alumno_dm(int &);
+void grupo_dm(int &);
 
 //escritura de datos
-void writeMateria(int);
-void writeAlumno(int);
-void writeGrupo(int);
+void writeM();
+void writeA();
+void writeG();
 
-void printGrupos();
+//impresion de datos
+void printG();
 /* --------------- prototipos --------------- */
 
-/* --------------- estructuras --------------- */
-//Materia
-typedef struct m {
-	char nombreM[10];
-	float calificacion;
-	float promedioM;
-} Materias;
-
-//Alumno
-typedef struct a {
-	char nombresA[10];
-	char apellidos[10];
-	m unidadesA;
-	float promedioA;
-} Alumnos;
-
-//Grupo
-typedef struct g {
-	char nombreG[10];
-	a discentes;
-	float promedioG;
-} Grupos;
-/* --------------- estructuras --------------- */
-
-/* --------------- variables --------------- */
-Materias *materias;
-Alumnos *alumnos;
-Grupos *grupos;
-
-int tMaterias = 0, tAlumnos = 0, tGrupos = 0, masDatos;				//tamaño de los vectores
-/* --------------- variables --------------- */
-
 /* --------------- funciones --------------- */
-//asiganacion de memoria a las materias
-void asignaMemMateria(int *cantM) {
-	materias = (Materias*) malloc((*cantM + 1) * sizeof(Materias));
-	
-	writeMateria(*cantM);
-	
-	(*cantM)++;
-	//tMaterias++;
+void materia_dm(int &cantM) {
+	++cantM;
+
+	materias = new SMateria[cantM];
 }
 
-//asignacion de memoria a los alumnos
-void asignaMemAlumno(int *cantA) {
-	alumnos = (Alumnos*) malloc((*cantA + 1) * sizeof(Alumnos));
-	
-	writeAlumno(*cantA);
-	
-	(*cantA)++;
-	//tAlumnos++;
+void alumno_dm(int &cantA) {
+	++cantA;
+
+	alumnos = new SAlumno[cantA];
 }
 
-//asignacion de memoria a los grupos
-void asignaMemGrupo(int *cantG) {
-	grupos = (Grupos*) malloc((*cantG + 1) * sizeof(Grupos));
-	
-	writeGrupo(*cantG);
-	
-	(*cantG)++;
-	//tGrupos++;
+void grupo_dm(int &cantG) {
+	++cantG;
+
+	grupos = new SGrupo[cantG];
 }
 
-//escritura de datos de la materia
-void writeMateria(int cantm) {
-	cout<<"\t --- Materia ---"<<endl;
+void writeM() {
+	materia_dm(tMaterias);
+
+	cout<<"--- MATERIA ---"<<endl;
 	cout<<"Nombre: ";
 	cin.ignore();
-	cin.getline(materias -> nombreM, 10, '\n');
-	cout<<"Calificación: ";
-	cin>>materias -> calificacion;
+	cin.getline(materias->nombre, 10, '\n');
+	cout<<"Calificaión: ";
+	cin>>materias->nota;
 	cout<<"¿agregar otra materia? [1] si [2] no ";
 	cin>>masDatos;
 	
 	if(masDatos == 1) {
-		asignaMemMateria(&cantm);
+		writeM();
 	}
 }
 
-//escritura de datos del alumno
-void writeAlumno(int canta) {
-	cout<<"\t --- Alumno ---"<<endl;
+void writeA() {
+	alumno_dm(tAlumnos);
+
+	cout<<"--- ALUMNO ---"<<endl;
 	cout<<"Nombre: ";
 	cin.ignore();
-	cin.getline(alumnos -> nombresA, 10, '\n');
-	cout<<"Apellidos: ";
-	cin.getline(alumnos -> apellidos, 10, '\n');
+	cin.getline(alumnos->nombre, 10, '\n');
 	cout<<"agregar materias: [1] si [2] no ";
 	cin>>masDatos;
 	
 	if(masDatos == 1) {
-		asignaMemMateria(&canta);
+		writeA();
 	}
 }
 
-//escritura de datos del grupo
-void writeGrupo(int cantg) {
-	cout<<"\t ---- Grupo ----"<<endl;
+void writeG() {
+	grupo_dm(tGrupos);
+
+	cout<<"---- GRUPO ----"<<endl;
 	cout<<"Nombre: ";
 	cin.ignore();
 	fflush(stdin);
-	cin.getline(grupos -> nombreG, 10, '\n');
-	cout<<"Grupo: "<<grupos -> nombreG<<endl;
+	cin.getline(grupos[contG].nombre, 10, '\n');
+
+	contG++;
+
 	cout<<"agregar alumnos: [1] si [2] no ";
 	cin>>masDatos;
 	
 	if(masDatos == 1) {
-		asignaMemAlumno(&cantg);
+		alumno_dm(tAlumnos);
 	}
 	
 	cout<<"¿agregar otro grupo? [1] si [2] no ";
 	cin>>masDatos;
-	cout<<"Cantidad de grupos: "<<tGrupos<<endl;
 	
 	if(masDatos == 1) {
-		asignaMemGrupo(&tGrupos);
+		writeG();
 	}
 }
 
-//imprime grupos
-void printGrupos() {
-	cout<<"   --- GRUPOS REGISTRADOS ---"<<endl;
+void printG() {
+	cout<<"--- GRUPOS REGISTRADOS ---"<<endl;
 
 	for(int i = 0; i < tGrupos; i++) {
-		cout<<"["<<i + 1<<"] "<<grupos -> nombreG[i]<<endl;
+		cout<<"["<<i + 1<<"] "<<grupos[i].nombre<<endl;
 	}
 }
 /* --------------- funciones --------------- */

@@ -47,10 +47,6 @@ int main() {
 			}
 		} while(bucle == 1);
 	}
-	
-	//delete materias;
-	//delete alumnos;
-	//delete grupos;
 
 	getch();
 

@@ -20,6 +20,7 @@ void start();									//inicializador
 void invalidLog(int &);							//login fallido
 void repAccess(int &, int &);					//reintentar login
 void menu();									//menu principal
+void sub_menu();
 /* --------------- prototipos --------------- */
 
 /* --------------- estructuras --------------- */
@@ -97,17 +98,24 @@ void menu() {
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
-			printGrupos();
+			printG();
+			//sub_menu();
+			cout<<"No disponoble..."<<endl;
 			break;
 		case 2:
 			cout<<"------------ AGREGAR GRUPO ------------"<<endl;
-			asignaMemGrupo(&tGrupos);
-			makeFile();
+			writeG();
+			cout<<"No disponoble..."<<endl;
 			break;
 		case 3:
 			cout<<"Gracias por utilizar main.exe\nSaliendo..."<<endl;
 			break;
 	}
+}
+
+void sub_menu() {
+	cout<<"\nSeleccione un grupo...";
+	cin>>menu_option;
 }
 
 //inicializa menu
