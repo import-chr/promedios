@@ -33,7 +33,7 @@ int main() {
 	
 	if(menu_option != 3) {
 		do {
-			cout<<"[1] Volver al menú [2] Salir"<<endl;
+			cout<<"\n[1] Volver al menú [2] Salir"<<endl;
 			cin>>bucle;
 			
 			if(bucle == 1) {

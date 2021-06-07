@@ -24,14 +24,14 @@ typedef struct {
 //struct de alumno
 typedef struct {
 	char nombre[10];
-	SMateria materia;
+	SMateria *materia;
 	float promedio;
 } SAlumno;
 
 //struct de grupo
 typedef struct {
 	char nombre[10];
-	SAlumno alumno;
+	SAlumno *alumno;
 	float promedio;
 } SGrupo;
 /* --------------- estructuras --------------- */
@@ -43,107 +43,104 @@ SAlumno *alumnos = NULL;
 SGrupo *grupos = NULL;
 
 //cantidad de elementos
-int tMaterias = 0, tAlumnos = 0, tGrupos = 0;
-int masDatos, contG;
+int tMaterias, tAlumnos, tGrupos;
 /* --------------- variables --------------- */
 
 /* --------------- prototipos --------------- */
 //asignacion de memoria
-void materia_dm(int &);
-void alumno_dm(int &);
-void grupo_dm(int &);
+void memoriaG(int &, int &);
+void memoriaA(int &, int &);
+void memoriaM(int &, int&);
 
 //escritura de datos
-void writeM();
-void writeA();
-void writeG();
+void writeM(int &);
+void writeA(int &);
+void writeG(int &, int &);
 
-//impresion de datos
-void printG();
+void getData();
+void printData();
 /* --------------- prototipos --------------- */
 
 /* --------------- funciones --------------- */
-void materia_dm(int &cantM) {
-	++cantM;
+//memoria dinamica -> grupos
+void memoriaG(int &cG) {
+	cout<<"¿cuantos grupos desea agregar? ";
+	cin>>cG;
 
-	materias = new SMateria[cantM];
+	grupos = new SGrupo[cG];
 }
 
-void alumno_dm(int &cantA) {
-	++cantA;
-
-	alumnos = new SAlumno[cantA];
-}
-
-void grupo_dm(int &cantG) {
-	++cantG;
-
-	grupos = new SGrupo[cantG];
-}
-
-void writeM() {
-	materia_dm(tMaterias);
-
-	cout<<"--- MATERIA ---"<<endl;
-	cout<<"Nombre: ";
-	cin.ignore();
-	cin.getline(materias->nombre, 10, '\n');
-	cout<<"Calificaión: ";
-	cin>>materias->nota;
-	cout<<"¿agregar otra materia? [1] si [2] no ";
-	cin>>masDatos;
-	
-	if(masDatos == 1) {
-		writeM();
-	}
-}
-
-void writeA() {
-	alumno_dm(tAlumnos);
-
-	cout<<"--- ALUMNO ---"<<endl;
-	cout<<"Nombre: ";
-	cin.ignore();
-	cin.getline(alumnos->nombre, 10, '\n');
-	cout<<"agregar materias: [1] si [2] no ";
-	cin>>masDatos;
-	
-	if(masDatos == 1) {
-		writeA();
-	}
-}
-
-void writeG() {
-	grupo_dm(tGrupos);
-
+//peticion de datos -> struct grupo
+void writeG(int &tG, int &pG) {
 	cout<<"---- GRUPO ----"<<endl;
 	cout<<"Nombre: ";
 	cin.ignore();
 	fflush(stdin);
-	cin.getline(grupos[contG].nombre, 10, '\n');
+	cin.getline(grupos[pG].nombre, 10, '\n');
+	
+	memoriaA(tAlumnos, pG);
 
-	contG++;
+    for(int i = 0; i < tAlumnos; i++) {
+        writeA(tAlumnos);
+    }
 
-	cout<<"agregar alumnos: [1] si [2] no ";
-	cin>>masDatos;
-	
-	if(masDatos == 1) {
-		alumno_dm(tAlumnos);
-	}
-	
-	cout<<"¿agregar otro grupo? [1] si [2] no ";
-	cin>>masDatos;
-	
-	if(masDatos == 1) {
-		writeG();
-	}
+    memoriaM(tMaterias, pG);
+
+    for(int i = 0; i < tMaterias; i++) {
+        writeM(tMaterias);
+    }
 }
 
-void printG() {
-	cout<<"--- GRUPOS REGISTRADOS ---"<<endl;
-
+void printData() {
 	for(int i = 0; i < tGrupos; i++) {
 		cout<<"["<<i + 1<<"] "<<grupos[i].nombre<<endl;
 	}
+}
+
+//memoria dinamica -> alumnos
+void memoriaA(int &cA, int &pA) {
+	cout<<"número de alumnos: ";
+	cin>>cA;
+
+	grupos[pA].alumno = new SAlumno[cA];
+}
+
+//peticion de datos -> struct alumno
+void writeA(int &pA) {
+	cout<<"--- ALUMNO ---"<<endl;
+	cout<<"Nombre: ";
+	cin.ignore();
+	fflush(stdin);
+	cin.getline(alumnos[pA].nombre, 10, '\n');
+}
+
+
+//memoria dinamica -> materias
+void memoriaM(int &cM, int &pM) {
+	cout<<"número de materias: ";
+	cin>>cM;
+
+    grupos[pM].alumno->materia = new SMateria[cM];
+}
+
+//peticion de datos -> struct materia
+void writeM(int &pM) {
+	cout<<"--- MATERIA ---"<<endl;
+	cout<<"Nombre: ";
+	cin.ignore();
+	fflush(stdin);
+	cin.getline(materias[pM].nombre, 10, '\n');
+	cout<<"Calificaión: ";
+	cin>>materias[pM].nota;
+	fflush(stdin);
+}
+
+//llamada func:write
+void getData() {
+    memoriaG(tGrupos);
+
+    for(int i = 0; i < tGrupos; i++) {
+        writeG(tGrupos, i);
+    }
 }
 /* --------------- funciones --------------- */

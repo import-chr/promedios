@@ -32,7 +32,7 @@ static const char user_[] = "a";
 static const char pass_[] = "p";
 
 static char user[10];							//nombre de usuario
-static char passw[10];							//contraseña
+static char passw[10];							//contraseï¿½a
 static bool rLog = false;						//repuesta de login
 static bool successfulLogIn;					//valor de retorno de func logIn()
 static int menu_option, rep, contador = 2;		//seleccion de munu, contador de intentos
@@ -98,18 +98,16 @@ void menu() {
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
-			printG();
+			printData();
 			//sub_menu();
-			cout<<"No disponoble..."<<endl;
-			break;
+		break;
 		case 2:
 			cout<<"------------ AGREGAR GRUPO ------------"<<endl;
-			writeG();
-			cout<<"No disponoble..."<<endl;
-			break;
+			getData();
+		break;
 		case 3:
 			cout<<"Gracias por utilizar main.exe\nSaliendo..."<<endl;
-			break;
+		break;
 	}
 }
 
