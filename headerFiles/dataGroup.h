@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 /* --------------- librerias c++ --------------- */
 
 using namespace std;
@@ -14,133 +15,89 @@ using namespace std;
 /* --------------- headers --------------- */
 
 /* --------------- estructuras --------------- */
-//struct de materia
-typedef struct {
-	char nombre[10];
-	float nota;
-	float promedio;
-} SMateria;
-
-//struct de alumno
-typedef struct {
-	char nombre[10];
-	SMateria *materia;
-	float promedio;
-} SAlumno;
-
 //struct de grupo
 typedef struct {
-	char nombre[10];
-	SAlumno *alumno;
-	float promedio;
-} SGrupo;
+    char grupo[10];
+    vector<string> alumnos{};
+    vector<string> materias{};
+    //vector<int> notas{};
+} Grupo;
 /* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
-//array de struct dinamicos
-SMateria *materias = NULL;
-SAlumno *alumnos = NULL;
-SGrupo *grupos = NULL;
+//array dinamico de struct
+Grupo *grupos = NULL;
 
-//cantidad de elementos
-int tMaterias, tAlumnos, tGrupos;
+int tGrupos, tAlumnos, tMaterias;
+string almn, gpr;
 /* --------------- variables --------------- */
 
 /* --------------- prototipos --------------- */
-//asignacion de memoria
-void memoriaG(int &, int &);
-void memoriaA(int &, int &);
-void memoriaM(int &, int&);
+//asignancion de memoria
+void memoriaG(int &);
 
 //escritura de datos
-void writeM(int &);
-void writeA(int &);
-void writeG(int &, int &);
-
+void writeGrupo(int &);
+void addA(string &, int);
+void addM(string &, int);
 void getData();
-void printData();
 /* --------------- prototipos --------------- */
 
 /* --------------- funciones --------------- */
-//memoria dinamica -> grupos
-void memoriaG(int &cG) {
-	cout<<"¿cuantos grupos desea agregar? ";
-	cin>>cG;
+void memoriaG(int &tG) {
+    cout<<"¿cuántos grupos desea agregar? ";
+    cin>>tG;
 
-	grupos = new SGrupo[cG];
+    grupos = new Grupo[tG];
 }
 
-//peticion de datos -> struct grupo
-void writeG(int &tG, int &pG) {
-	cout<<"---- GRUPO ----"<<endl;
-	cout<<"Nombre: ";
-	cin.ignore();
+void writeGrupo(int &iter) {
+	cout<<endl;
+    cout<<"--- GRUPO ["<<iter + 1<<"] ---"<<endl;
+    cout<<"Nombre: ";
+    fflush(stdin);
+    cin.getline(grupos[iter].grupo, 10, '\n');
+	strupr(grupos[iter].grupo);
+	cout<<"--- "<<grupos[iter].grupo<<": ALUMNOS ---"<<endl;
+	cout<<"\nnúmero de alumnos: ";
 	fflush(stdin);
-	cin.getline(grupos[pG].nombre, 10, '\n');
-	
-	memoriaA(tAlumnos, pG);
+	cin>>tAlumnos;
 
-    for(int i = 0; i < tAlumnos; i++) {
-        writeA(tAlumnos);
-    }
+	for(int i = 0; i < tAlumnos; i++) {
+		addA(almn, i);
+	}
 
-    memoriaM(tMaterias, pG);
+	cout<<"--- "<<grupos[iter].grupo<<": MATERIAS ---"<<endl;
+	cout<<"\nnúmero de materias: ";
+	fflush(stdin);
+	cin>>tMaterias;
 
-    for(int i = 0; i < tMaterias; i++) {
-        writeM(tMaterias);
-    }
-}
-
-void printData() {
-	for(int i = 0; i < tGrupos; i++) {
-		cout<<"["<<i + 1<<"] "<<grupos[i].nombre<<endl;
+	for(int i = 0; i < tMaterias; i++) {
+		addM(gpr, i);
 	}
 }
 
-//memoria dinamica -> alumnos
-void memoriaA(int &cA, int &pA) {
-	cout<<"número de alumnos: ";
-	cin>>cA;
-
-	grupos[pA].alumno = new SAlumno[cA];
-}
-
-//peticion de datos -> struct alumno
-void writeA(int &pA) {
-	cout<<"--- ALUMNO ---"<<endl;
-	cout<<"Nombre: ";
-	cin.ignore();
+void addA(string &str, int p) {
+	cout<<"["<<p + 1<<"]"<<"Nombre: ";
 	fflush(stdin);
-	cin.getline(alumnos[pA].nombre, 10, '\n');
+	cin>>str;
+
+	grupos->alumnos.push_back(str);
 }
 
-
-//memoria dinamica -> materias
-void memoriaM(int &cM, int &pM) {
-	cout<<"número de materias: ";
-	cin>>cM;
-
-    grupos[pM].alumno->materia = new SMateria[cM];
-}
-
-//peticion de datos -> struct materia
-void writeM(int &pM) {
-	cout<<"--- MATERIA ---"<<endl;
-	cout<<"Nombre: ";
-	cin.ignore();
+void addM(string &str, int p) {
+	cout<<"["<<p + 1<<"]"<<"Nombre: ";
 	fflush(stdin);
-	cin.getline(materias[pM].nombre, 10, '\n');
-	cout<<"Calificaión: ";
-	cin>>materias[pM].nota;
-	fflush(stdin);
+	cin>>str;
+
+	grupos->materias.push_back(str);
 }
 
-//llamada func:write
 void getData() {
-    memoriaG(tGrupos);
+	memoriaG(tGrupos);
 
-    for(int i = 0; i < tGrupos; i++) {
-        writeG(tGrupos, i);
-    }
+	for(int i = 0; i < tGrupos; i++){
+		writeGrupo(i);
+	}
 }
 /* --------------- funciones --------------- */

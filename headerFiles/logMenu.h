@@ -98,11 +98,10 @@ void menu() {
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
-			printData();
 			//sub_menu();
 		break;
 		case 2:
-			cout<<"------------ AGREGAR GRUPO ------------"<<endl;
+			cout<<"------------ AGREGAR GRUPOS ------------"<<endl;
 			getData();
 		break;
 		case 3:
