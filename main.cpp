@@ -22,7 +22,7 @@ using namespace std;
 /* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
-int bucle;
+int bucle; 				//retorno a menu
 /* --------------- variables --------------- */
 
 int main() {
@@ -33,7 +33,7 @@ int main() {
 	
 	if(menu_option != 3) {
 		do {
-			cout<<"\n[1] Volver al menú [2] Salir"<<endl;
+			cout<<"\n[1] Volver al menu [2] Salir"<<endl;
 			cin>>bucle;
 			
 			if(bucle == 1) {

@@ -2,14 +2,14 @@
 
 ## 2° ICI A
 
-* Díaz
-* Lucely
-* Daniel
-* Christian
+* Rene Díaz Sanchez
+* Lucely González Escamilla
+* Andrés Daniel García Sanchez
+* Christian Jair Loeza Ramírez
 
 - - -
 
-## Cálculo de promedios:
+## Cálculo de promedios por:
 
 * Grupo
 * Alumno

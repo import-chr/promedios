@@ -43,11 +43,11 @@ static int menu_option, rep, contador = 2;		//seleccion de munu, contador de int
 bool logIn(bool &sLog) {
 	cout<<"Usuario: ";
 	cin>>user;
-	cout<<"Contraseña: ";
+	cout<<"Contrasena: ";
 	//cin.getline(passw, 10);
 	leerPasw(passw);
 
-	//usuario y contrase? correctos
+	//usuario y contrasena correctos
 	int uu = strcmp(user, user_);
 	int pp =  strcmp(passw, pass_);
 
@@ -62,10 +62,10 @@ void invalidLog(int &r0) {
 	if(contador == 0) {
 		r0 = 2;
 
-		cout<<"Límite de intentos excedido\nSaliendo..."<<endl;
+		cout<<"Limite de intentos excedido\nSaliendo..."<<endl;
 	}
 	else {
-		cout<<"Usuario o contraseña incorrectos"<<endl;
+		cout<<"Usuario o contrasena incorrectos"<<endl;
 		cout<<"Intentar nuevamente...\n[1] si\n[2] no"<<endl;
 		cin>>r0;
 		
@@ -98,7 +98,8 @@ void menu() {
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
-			//sub_menu();
+			printGrupos();
+			sub_menu();
 		break;
 		case 2:
 			cout<<"------------ AGREGAR GRUPOS ------------"<<endl;
@@ -113,6 +114,8 @@ void menu() {
 void sub_menu() {
 	cout<<"\nSeleccione un grupo...";
 	cin>>menu_option;
+
+	printAlumnos(menu_option);
 }
 
 //inicializa menu
