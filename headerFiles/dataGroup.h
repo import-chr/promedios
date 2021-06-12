@@ -21,6 +21,7 @@ typedef struct Grupo {
     char grupo[10];
     vector<string> alumnos{};
     vector<string> materias{};
+	//float **grades = NULL;
 	float media;
 	Grupo *next;
 };
@@ -33,13 +34,13 @@ static Grupo *start_gpr;		//inicio de nodo
 static Grupo *end_gpr;			//fin de nodo
 
 //matriz dinamica => notas
-float **grades = NULL;
+float **grades;
 
 int contGrupo = 1;
 bool new_gpr_bool = true;
+size_t tGrupos, tAlumnos, tMaterias;
 static int a_, m_, new_gpr_int;
 static float nota;
-static size_t tGrupos, tAlumnos, tMaterias;
 static string almn, gpr;
 /* --------------- variables --------------- */
 
@@ -48,13 +49,16 @@ static string almn, gpr;
 void startQueue(bool &);
 
 //DM => matriz
-void memoriaN(size_t &, size_t &);
+float **memoriaN(float **, size_t &, size_t &);
+
+//free => matriz
+void freeN(float **, size_t);
 
 //escritura de datos
 void writeGrupo(int &, size_t &, size_t &);
 void addA(string &);
 void addM(string &);
-void writeNotas(float, size_t &, size_t &);
+void writeNotas(float **, float, size_t &, size_t &);
 
 //operaciones
 float promedio();
@@ -103,7 +107,7 @@ void writeGrupo(int &cont, size_t &mA, size_t &mM) {
 	cin>>a_;
 
 	//llamada en bucle addA()
-	for(int i = 0; i < a_; i++) {
+	for(int i(0); i < a_; i++) {
 		addA(almn);
 	}
 
@@ -115,7 +119,7 @@ void writeGrupo(int &cont, size_t &mA, size_t &mM) {
 	cin>>m_;
 
 	//llamada en bucle addM()
-	for(int i = 0; i < m_; i++) {
+	for(int i(0); i < m_; i++) {
 		addM(gpr);
 	}
 
@@ -125,14 +129,15 @@ void writeGrupo(int &cont, size_t &mA, size_t &mM) {
 	mM = grupos->materias.size();					//largo de vector materias
 
 	//reservacion de memoria
-	memoriaN(mA, mM);
+	memoriaN(grades, mA, mM);
 
 	//cout<<"\nta:"<<tAlumnos<<"\ntm:"<<tMaterias<<endl;
 
 	cout<<"--- "<<grupos->grupo<<": CALIFICACIONES ---"<<endl;
 	cin.sync();
 
-	writeNotas(nota, mA, mM);
+	fflush(stdin);
+	writeNotas(grades, nota, mA, mM);
 
 	cont++;
 }
@@ -157,28 +162,40 @@ void addM(string &str) {
 	grupos->materias.push_back(str);
 }
 
-void memoriaN(size_t &rows, size_t &columns) {
-	grades = new float *[rows];
+float **memoriaN(float **matriz, size_t &rows, size_t &columns) {
+	matriz = new float *[rows];
 
-	for(int r = 0; r < rows; r++) {
-		grades[r] = new float[columns];
+	for(size_t r(0); r < rows; r++) {
+		matriz[r] = new float[columns];
 	}
+
+	return matriz;
 }
 
-void writeNotas(float cal, size_t &tA, size_t &tM) {
-	for(int a = 0; a < tA; a++) {
-		for(int m = 0; m < tM; m++) {
+void freeN(float **matriz, size_t rows) {
+	for(size_t r(0); r < rows; r++) {
+		delete[] matriz[r];
+	}
+
+	delete[] matriz;
+}
+
+void writeNotas(float **matriz, float cal, size_t &tA, size_t &tM) {
+	for(size_t a(0); a < tA; a++) {
+		for(size_t m(0); m < tM; m++) {
+			cin.sync();
 			cout<<grupos->alumnos[a]<<": ";
 			cout<<grupos->materias[m]<<endl;
 			cout<<"Calificacion: ";
 			fflush(stdin);
 			//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+			cin.sync();
 			cin>>cal;
 
-			grades[a][m] = cal;
+			matriz[a][m] = cal;
 		}
 	}
 }
 
-//float promedio() {}
+float promedio() {}
 /* --------------- funciones --------------- */
