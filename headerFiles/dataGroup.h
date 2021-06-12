@@ -27,32 +27,33 @@ typedef struct Grupo {
 };
 /* --------------- estructuras --------------- */
 
+//prototipos matriz
+//DM => matriz
+float **memoriaN(size_t &, size_t &);
+
+//free => matriz
+void freeN(float **, size_t);
+
 /* --------------- variables --------------- */
-//DM => struct
-Grupo *grupos;					//auxiliar
-static Grupo *start_gpr;		//inicio de nodo
-static Grupo *end_gpr;			//fin de nodo
-
-//matriz dinamica => notas
-float **grades;
-
 int contGrupo = 1;
 bool new_gpr_bool = true;
 size_t tGrupos, tAlumnos, tMaterias;
 static int a_, m_, new_gpr_int;
 static float nota;
 static string almn, gpr;
+
+//DM => struct
+Grupo *grupos;					//auxiliar
+static Grupo *start_gpr;		//inicio de nodo
+static Grupo *end_gpr;			//fin de nodo
+
+//matriz dinamica => notas
+float **grades = memoriaN(tAlumnos, tMaterias);
 /* --------------- variables --------------- */
 
 /* --------------- prototipos --------------- */
 //cola
 void startQueue(bool &);
-
-//DM => matriz
-float **memoriaN(float **, size_t &, size_t &);
-
-//free => matriz
-void freeN(float **, size_t);
 
 //escritura de datos
 void writeGrupo(int &, size_t &, size_t &);
@@ -129,7 +130,7 @@ void writeGrupo(int &cont, size_t &mA, size_t &mM) {
 	mM = grupos->materias.size();					//largo de vector materias
 
 	//reservacion de memoria
-	memoriaN(grades, mA, mM);
+	memoriaN(mA, mM);
 
 	//cout<<"\nta:"<<tAlumnos<<"\ntm:"<<tMaterias<<endl;
 
@@ -162,14 +163,14 @@ void addM(string &str) {
 	grupos->materias.push_back(str);
 }
 
-float **memoriaN(float **matriz, size_t &rows, size_t &columns) {
-	matriz = new float *[rows];
+float **memoriaN(size_t &rows, size_t &columns) {
+	grades = new float *[rows];
 
 	for(size_t r(0); r < rows; r++) {
-		matriz[r] = new float[columns];
+		grades[r] = new float[columns];
 	}
 
-	return matriz;
+	return grades;
 }
 
 void freeN(float **matriz, size_t rows) {
