@@ -17,169 +17,168 @@ using namespace std;
 
 /* --------------- estructuras --------------- */
 //struct de grupo
-typedef struct {
+typedef struct Grupo {
     char grupo[10];
     vector<string> alumnos{};
     vector<string> materias{};
-	vector<int> notas{};
-} Grupo;
+	float media;
+	Grupo *next;
+};
 /* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
-//array dinamico => struct
-Grupo *grupos = NULL;
+//DM => struct
+Grupo *grupos;					//auxiliar
+static Grupo *start_gpr;		//inicio de nodo
+static Grupo *end_gpr;			//fin de nodo
 
 //matriz dinamica => notas
 float **grades = NULL;
 
-static int tGrupos, tAlumnos, tMaterias;
+int contGrupo = 1;
+bool new_gpr_bool = true;
+static int a_, m_, new_gpr_int;
 static float nota;
+static size_t tGrupos, tAlumnos, tMaterias;
 static string almn, gpr;
 /* --------------- variables --------------- */
 
 /* --------------- prototipos --------------- */
-//asignancion de memoria
-void memoriaG(int &);
-void memoriaN(int &, int &);
+//cola
+void startQueue(bool &);
+
+//DM => matriz
+void memoriaN(size_t &, size_t &);
 
 //escritura de datos
-void writeGrupo(int &);
-void addA(string &, int);
-void addM(string &, int);
-void writeNotas(float, int &, int &, int &);
-void getData();
+void writeGrupo(int &, size_t &, size_t &);
+void addA(string &);
+void addM(string &);
+void writeNotas(float, size_t &, size_t &);
 
-//impresion de datos
-void printGrupos();
-void printAlumnos(int &); //int => grupo seleccionado
+//operaciones
+float promedio();
 /* --------------- prototipos --------------- */
 
 /* --------------- funciones --------------- */
-//asignacion de memoria a struct Grupo
-void memoriaG(int &tG) {
-    cout<<"cuantos grupos desea agregar? ";
-    cin>>tG;
+//inicializa la cola
+void startQueue(bool &new_gpr_) {
+	start_gpr = NULL;
+	end_gpr = NULL;
 
-    grupos = new Grupo[tG];
-}
+	while(new_gpr_) {
+		grupos = new Grupo;
 
-//asignacion de memoria a struct Grupo => notas
-void memoriaN(int &filas, int &columnas) {
-	grades = new float *[filas];
+		writeGrupo(contGrupo, tAlumnos, tMaterias);
 
-	for(int f = 0; f < filas; f++) {
-		grades[f] = new float[columnas];
+		if(start_gpr == NULL) {
+			start_gpr = grupos;
+			end_gpr = grupos;
+			grupos->next = NULL;
+		}
+		else {
+			end_gpr->next = grupos;
+			grupos->next = NULL;
+			end_gpr = grupos;
+		}
+		cout<<"agregar otro grupo: [1] Si [2] No\n";
+		cin>>new_gpr_int;
+
+		(new_gpr_int == 1) ? new_gpr_ = true : new_gpr_ = false;
 	}
 }
 
 //escritura de datos de struct Grupo
-void writeGrupo(int &iter) {
+void writeGrupo(int &cont, size_t &mA, size_t &mM) {
 	cout<<endl;
-    cout<<"--- GRUPO ["<<iter + 1<<"] ---"<<endl;
-    cout<<"Nombre: ";
+    cout<<"--- GRUPO ["<<cont<<"] ---"<<endl;
+    cout<<"Nombre (grupo): ";
     fflush(stdin);
-    cin.getline(grupos[iter].grupo, 10, '\n');
-	strupr(grupos[iter].grupo);
-	cout<<"--- "<<grupos[iter].grupo<<": ALUMNOS ---"<<endl;
+    cin.getline(grupos->grupo, 10, '\n');
+	strupr(grupos->grupo);
+
+	cout<<"\n--- "<<grupos->grupo<<": ALUMNOS ---"<<endl;
 	cout<<"\nnumero de alumnos: ";
 	fflush(stdin);
-	cin>>tAlumnos;
+	cin>>a_;
 
-	//llamada en bucle a añadir alumno
-	for(int i = 0; i < tAlumnos; i++) {
-		addA(almn, iter);
+	//llamada en bucle addA()
+	for(int i = 0; i < a_; i++) {
+		addA(almn);
 	}
 
-	cout<<"--- "<<grupos[iter].grupo<<": MATERIAS ---"<<endl;
+	//cout<<grupos->alumnos.size()<<endl;
+
+	cout<<"\n--- "<<grupos->grupo<<": MATERIAS ---"<<endl;
 	cout<<"\nnumero de materias: ";
 	fflush(stdin);
-	cin>>tMaterias;
+	cin>>m_;
 
-	//llamada en bucle a añadir materia
-	for(int i = 0; i < tMaterias; i++) {
-		addM(gpr, iter);
+	//llamada en bucle addM()
+	for(int i = 0; i < m_; i++) {
+		addM(gpr);
 	}
 
-	//cout<<"m: "<<tMaterias<<" a: "<<tAlumnos;
-	//reservacion de memoria matriz => grades[][]
-	memoriaN(tAlumnos, tMaterias);
+	//cout<<grupos->materias.size()<<endl;
 
-	cout<<"--- "<<grupos[iter].grupo<<": CALIFICAIONES ---"<<endl;
+	mA = grupos->alumnos.size();					//largo de vector alumnos
+	mM = grupos->materias.size();					//largo de vector materias
+
+	//reservacion de memoria
+	memoriaN(mA, mM);
+
+	//cout<<"\nta:"<<tAlumnos<<"\ntm:"<<tMaterias<<endl;
+
+	cout<<"--- "<<grupos->grupo<<": CALIFICACIONES ---"<<endl;
 	cin.sync();
 
-	writeNotas(nota, tAlumnos, tMaterias, iter);
+	writeNotas(nota, mA, mM);
+
+	cont++;
 }
 
-//agrega alumno al vector alumnos en struct Grupo
-void addA(string &str, int p) {
-	cout<<"["<<p + 1<<"] "<<"Nombre: ";
+void addA(string &str) {
+	cout<<"GRUPO ["<<contGrupo<<"] "<<"Nombre (alumno): ";
 	fflush(stdin);
 	cin>>str;
 
 	cin.sync();
 
-	grupos[p].alumnos.push_back(str);
+	grupos->alumnos.push_back(str);
 }
 
-//agrega materia al vector materias en struct Grupo
-void addM(string &str, int p) {
-	cout<<"["<<p + 1<<"] "<<"Nombre: ";
+void addM(string &str) {
+	cout<<"GRUPO ["<<contGrupo<<"] "<<"Nombre (materia): ";
 	fflush(stdin);
 	cin>>str;
 
 	cin.sync();
 
-	grupos[p].materias.push_back(str);
+	grupos->materias.push_back(str);
 }
 
-//escritura de matriz => grades[][];
-void writeNotas(float calif, int &tA, int &tM, int &posG) {
-	//peticion de cada calificaion
+void memoriaN(size_t &rows, size_t &columns) {
+	grades = new float *[rows];
+
+	for(int r = 0; r < rows; r++) {
+		grades[r] = new float[columns];
+	}
+}
+
+void writeNotas(float cal, size_t &tA, size_t &tM) {
 	for(int a = 0; a < tA; a++) {
 		for(int m = 0; m < tM; m++) {
-			cout<<grupos[posG].alumnos[a]<<": ";
-			cout<<grupos[posG].materias[m]<<endl;
-			cout<<"Calificion: ";
+			cout<<grupos->alumnos[a]<<": ";
+			cout<<grupos->materias[m]<<endl;
+			cout<<"Calificacion: ";
 			fflush(stdin);
 			//std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			cin>>calif;
+			cin>>cal;
 
-			//asignacion de valores => grades[][] => alumno[materia * tMaterias]
-			grades[a][m] = calif;
+			grades[a][m] = cal;
 		}
 	}
-
-	//impresion de valores => grades[][] => alumno[materia * tMaterias]
-	/* for(int f = 0; f < tA; f++) {
-		for(int c = 0; c < tM; c++) {
-			cout<<"cal: "<<grades[f][c]<<endl;
-		}
-	} */
 }
 
-//peticion general de datos
-void getData() {
-	memoriaG(tGrupos);
-
-	//memoriaG => cantidad de memoria reservada para grupos
-	for(int i = 0; i < tGrupos; i++){
-		writeGrupo(i);
-	}
-}
-
-//impresion de grupos
-void printGrupos() {
-	for(int i = 0; i < tGrupos; i++) {
-		cout<<"["<<i + 1<<"] "<<grupos[i].grupo<<endl;
-	}
-}
-
-//impresion de alumnos
-void printAlumnos(int &s) {
-	cout<<"--- "<<grupos[s - 1].grupo<<" ---"<<endl;
-
-	for(int j = 0; j < grupos[s - 1].alumnos.size(); j++) {
-		cout<<"["<<j + 1<<"] "<<grupos[s - 1].alumnos[j]<<endl;
-	}
-}
+//float promedio() {}
 /* --------------- funciones --------------- */
