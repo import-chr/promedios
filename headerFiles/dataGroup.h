@@ -23,6 +23,7 @@ typedef struct Grupo {
     vector<string> materias{};
 	float media;
 	vector<float> mediaAlmn{};
+	int cantA, cantM;
 	Grupo *next;
 };
 /* --------------- estructuras --------------- */
@@ -36,9 +37,10 @@ void freeN(float **, size_t);
 
 /* --------------- variables --------------- */
 int contGrupo = 1;
+int a_, m_;
 bool new_gpr_bool = true;
 size_t tGrupos, tAlumnos, tMaterias, tPromedios;
-static int a_, m_, new_gpr_int;
+static int new_gpr_int;
 static float nota, prom;
 static string almn, gpr;
 
@@ -56,11 +58,14 @@ float **grades = memoriaN(tAlumnos, tMaterias);
 void startQueue(bool &);
 
 //escritura de datos
-void writeGrupo(int &, size_t &, size_t &, size_t &);
+void writeGrupo(int &, int , int , size_t &, size_t &, size_t &);
 void addA(string &);
 void addM(string &);
 void writeNotas(float **, float, size_t, size_t);
 void addN(float);
+
+//lectura de datos
+void printGrupos(int, int);
 
 //operaciones
 float promG(float **, size_t, size_t);
@@ -76,7 +81,7 @@ void startQueue(bool &new_gpr_) {
 	while(new_gpr_) {
 		grupos = new Grupo;
 
-		writeGrupo(contGrupo, tAlumnos, tMaterias, tPromedios);
+		writeGrupo(contGrupo, a_, m_, tAlumnos, tMaterias, tPromedios);
 
 		if(start_gpr == NULL) {
 			start_gpr = grupos;
@@ -97,7 +102,7 @@ void startQueue(bool &new_gpr_) {
 }
 
 //escritura de datos de struct Grupo
-void writeGrupo(int &cont, size_t &mA, size_t &mM, size_t &mP) {
+void writeGrupo(int &cont, int ca, int cm, size_t &mA, size_t &mM, size_t &mP) {
 	float aux_nota_a, aux_nota_g;
 
 	cout<<endl;
@@ -110,25 +115,27 @@ void writeGrupo(int &cont, size_t &mA, size_t &mM, size_t &mP) {
 	cout<<"\n--- "<<grupos->grupo<<": ALUMNOS ---"<<endl;
 	cout<<"\nnumero de alumnos: ";
 	fflush(stdin);
-	cin>>a_;
+	cin>>ca;
 
 	//llamada en bucle addA()
-	for(int i = 0; i < a_; i++) {
+	for(int i = 0; i < ca; i++) {
 		addA(almn);
 	}
 
 	cout<<"\n--- "<<grupos->grupo<<": MATERIAS ---"<<endl;
 	cout<<"\nnumero de materias: ";
 	fflush(stdin);
-	cin>>m_;
+	cin>>cm;
 
 	//llamada en bucle addM()
-	for(int i = 0; i < m_; i++) {
+	for(int i = 0; i < cm; i++) {
 		addM(gpr);
 	}
 
 	mA = grupos->alumnos.size();					//largo de vector alumnos
 	mM = grupos->materias.size();					//largo de vector materias
+	grupos->cantA = ca;
+	grupos->cantM = cm;
 
 	//reservacion de memoria
 	memoriaN(mA, mM);
@@ -261,5 +268,35 @@ float promA(float **matriz, size_t c, int &iter) {
 	aux_suma = 0;
 
 	return aux_prom;
+}
+
+void printGrupos() {
+	grupos = start_gpr;
+
+	while(grupos != NULL) {
+		int ta = grupos->cantA;
+		int tm = grupos->cantM;
+
+		cout<<endl<<"---------- "<<grupos->grupo<<" ----------"<<endl;
+		cout<<"Promedio Grupal: ";
+		cout<<grupos->media<<endl;
+
+		cout<<endl<<"--- Materias ---"<<endl;
+
+		for(int i = 0; i < tm; i++) {
+			cout<<grupos->materias[i]<<endl;
+		}
+
+		cout<<endl<<"--- Alumnos ---"<<endl;
+		cout<<"Nombre: Promedio"<<endl;
+
+		for(int i = 0; i < ta; i++) {
+			cout<<grupos->alumnos[i];
+			cout<<": ";
+			cout<<grupos->mediaAlmn[i]<<endl;
+		}
+
+		grupos = grupos->next;
+	}
 }
 /* --------------- funciones --------------- */
