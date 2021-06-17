@@ -20,11 +20,9 @@ void start();									//inicializador
 void invalidLog(int &);							//login fallido
 void repAccess(int &, int &);					//reintentar login
 void menu();									//menu principal
-void sub_menu();
+void sub_menu();								//menu secundario
+void selected();								//seleccion ->menu_option
 /* --------------- prototipos --------------- */
-
-/* --------------- estructuras --------------- */
-/* --------------- estructuras --------------- */
 
 /* --------------- variables --------------- */
 //unico administrador
@@ -32,10 +30,11 @@ static const char user_[] = "a";
 static const char pass_[] = "p";
 
 static char user[10];							//nombre de usuario
-static char passw[10];							//contrase�a
+static char passw[10];							//contrasena
 static bool rLog = false;						//repuesta de login
 static bool successfulLogIn;					//valor de retorno de func logIn()
-static int menu_option, rep, contador = 2;		//seleccion de munu, contador de intentos
+static int rep, contador = 2;					//seleccion de menu, contador de intentos
+int menu_option;
 /* --------------- variables --------------- */
 
 /* --------------- funciones --------------- */
@@ -90,32 +89,49 @@ void repAccess(int &r1, int &c) {
 
 //menu
 void menu() {
-	cout<<"------------ MENU ------------"<<endl;
-	cout<<"\n\t[1] Ver Grupos\n\t[2] Agregar Grupo\n\t[3] Salir\n"<<endl;
-	cout<<"------------------------------"<<endl;
+	cout<<"-------------------- MENU --------------------"<<endl;
+	cout<<"\n\t[1] Ver Grupos\n\t[2] Agregar Grupo\n\t[3] Abrir promedioGrupos.csv\n\t[4] Salir\n"<<endl;
+	cout<<"----------------------------------------------"<<endl;
 	cin>>menu_option;
 
+	selected();
+}
+
+//evalua seleccion de menu
+void selected() {
 	switch(menu_option) {
 		case 1:
 			cout<<"------------ GRUPOS ------------"<<endl;
 			printGrupos();
-			sub_menu();
+			//sub_menu();
 		break;
 		case 2:
 			cout<<"------------ AGREGAR GRUPOS ------------"<<endl;
-			getData();
+
+			new_gpr_bool = true;
+
+			startQueue(new_gpr_bool);
+			writeFile(fileCSV);
+			system("cls");
+			menu();
 		break;
 		case 3:
+			cout<<"Abriendo..."<<endl;
+
+			system("notepad promedioGrupos.csv");
+			system("cls");
+			menu();
+		break;
+		case 4:
 			cout<<"Gracias por utilizar main.exe\nSaliendo..."<<endl;
 		break;
 	}
 }
 
+//sub menu de visualizacion
 void sub_menu() {
 	cout<<"\nSeleccione un grupo...";
 	cin>>menu_option;
-
-	printAlumnos(menu_option);
 }
 
 //inicializa menu

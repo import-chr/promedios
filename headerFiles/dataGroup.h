@@ -12,9 +12,6 @@
 
 using namespace std;
 
-/* --------------- headers --------------- */
-/* --------------- headers --------------- */
-
 /* --------------- estructuras --------------- */
 //struct de grupo
 typedef struct Grupo {
@@ -280,6 +277,7 @@ float promG(float **matriz, size_t r, size_t c) {
 	return aux_prom;
 }
 
+//promedio por alumno de la matriz grades[][]
 float promA(float **matriz, size_t c, int &iter) {
 	size_t cm;
 	float aux_suma, aux_prom;
@@ -294,6 +292,7 @@ float promA(float **matriz, size_t c, int &iter) {
 	return aux_prom;
 }
 
+//promedio por materia de la matriz grades[][]
 float promM(float **matriz, size_t r, int &iter) {
 	size_t rm;
 	float aux_suma, aux_prom;
@@ -308,6 +307,7 @@ float promM(float **matriz, size_t r, int &iter) {
 	return aux_prom;
 }
 
+//impresion de grupos capturados
 void printGrupos() {
 	grupos = start_gpr;
 

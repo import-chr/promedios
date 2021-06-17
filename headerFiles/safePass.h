@@ -3,20 +3,11 @@
 #include <conio.h>
 /* --------------- librerias c++ --------------- */
 
-/* --------------- headers --------------- */
-/* --------------- headers --------------- */
-
 using namespace std;
 
 /* --------------- prototipos --------------- */
 void leerPasw(char frase[]);
 /* --------------- prototipos --------------- */
-
-/* --------------- estructuras --------------- */
-/* --------------- estructuras --------------- */
-
-/* --------------- variables --------------- */
-/* --------------- variables --------------- */
 
 /* --------------- funciones --------------- */
 void leerPasw(char frase[]) {
