@@ -17,9 +17,9 @@
 
 - - -
 
-## Notas:
+## Características:
 
 * Permite la creación de grupos, alumnos y unidades de aprendizaje
-* Genera un archivo .csv manipulable
+* Genera un archivo .csv
 
 - - -
