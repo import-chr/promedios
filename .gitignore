@@ -3,3 +3,6 @@ main.exe
 
 # ignoring source folder
 source-cpp/
+
+# ignoring .csv
+promedioGrupos.csv
