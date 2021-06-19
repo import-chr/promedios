@@ -30,16 +30,16 @@ bool writeFile(string fileName) {
     int i, j;
     grupos = start_gpr;
 
-    ofstream csv_file;
-    csv_file.open(fileName.c_str());                    //apertura de archivo
+    fstream csv_file;
+    csv_file.open(fileName.c_str(), fstream::out | fstream::app);                    //apertura de archivo
 
     if(!csv_file) {
         err = true;
     }
     else {
         while(grupos != NULL) {
-            csv_file<<grupos->grupo<<endl;                  //insercion nombre de grupo
-            csv_file<<grupos->media<<endl;                  //inserccion promedio grupal
+            csv_file<<grupos->grupo<<endl;                                           //insercion nombre de grupo
+            csv_file<<grupos->media<<endl;                                           //inserccion promedio grupal
             csv_file<<"Materias"<<endl;
 
             //insercion de materias y sus promedios
@@ -61,7 +61,7 @@ bool writeFile(string fileName) {
             grupos = grupos->next;
         }
 
-        csv_file.close();                               //cierre de archivo
+        csv_file.close();                                                            //cierre de archivo
     }
 
     return err;

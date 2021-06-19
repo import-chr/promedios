@@ -26,8 +26,8 @@ void selected();								//seleccion ->menu_option
 
 /* --------------- variables --------------- */
 //unico administrador
-static const char user_[] = "a";
-static const char pass_[] = "p";
+static const char user_[] = "admin";
+static const char pass_[] = "password";
 
 static char user[10];							//nombre de usuario
 static char passw[10];							//contrasena
