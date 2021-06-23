@@ -35,11 +35,13 @@ static bool rLog = false;						//repuesta de login
 static bool successfulLogIn;					//valor de retorno de func logIn()
 static int rep, contador = 2;					//seleccion de menu, contador de intentos
 int menu_option;
+int good_option[] = {1, 2, 3, 4};
 /* --------------- variables --------------- */
 
 /* --------------- funciones --------------- */
 //valida acceso
 bool logIn(bool &sLog) {
+	cout<<"--- PROMEDIOS ---"<<endl;
 	cout<<"Usuario: ";
 	cin>>user;
 	cout<<"Contrasena: ";
@@ -94,7 +96,15 @@ void menu() {
 	cout<<"----------------------------------------------"<<endl;
 	cin>>menu_option;
 
-	selected();
+	if(cin.fail()) {
+		cin.clear();
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		
+		cout<<"\ningrese opcion valida..."<<endl;
+		cin>>menu_option;
+		
+		selected();
+	}
 }
 
 //evalua seleccion de menu
